@@ -1,39 +1,40 @@
 <?php
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+// Login and Register (Accessible without authentication)
+Route::post('/signup', [AuthController::class, 'signup']);
+Route::post('/login', [AuthController::class, 'login']);
 
 
 
-Route::post('/register', [AuthController::class,'register'])->name('register');
-Route::post('login', [AuthController::class,'login'])->name('login');
+
+    // Route::post('signup', [AuthController::class, 'signup'])->middleware('auth:sanctum');
+    // Route::post('/login', [AuthController::class, 'login'])->middleware('auth:sanctum')->name('login'); 
+    // Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    // Route::middleware('api')->group(function () {
+    //     Route::post('/signup', [AuthController::class, 'signup']);
+    //     Route::post('/login', [AuthController::class, 'login']);
+    // });
 
 
 
-Route::middleware('auth:sanctum')->group(function () {
-   Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-});
+// Routes that require authentication
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-
-Route::middleware(['auth:sanctum', 'role:admin'])->group(function (){
-    Route::get('/admin', function(){
-        return response()->json(['message' => 'Admin Logged In Succesfully']);
+    // Role-based routes
+    Route::middleware(['role:admin'])->get('/admin', function () {
+        return response()->json(['message' => 'Admin Logged In Successfully']);
     });
-});
 
-Route::middleware(['auth:sanctum', 'role:student'])->group(function(){
-    Route::get('/student', function(){
-        return response()->json(['message' => 'Student Logged In Succesfully']);
+    Route::middleware(['role:student'])->get('/student', function () {
+        return response()->json(['message' => 'Student Logged In Successfully']);
     });
-});
 
-Route::middleware(['auth:sanctum', 'role:manager'])->group(function(){
-    Route::get('/manager', function(){
-        return response()->json(['message' => 'Manager Logged In Succesfully']);
+    Route::middleware(['role:manager'])->get('/manager', function () {
+        return response()->json(['message' => 'Manager Logged In Successfully']);
     });
 });

@@ -9,7 +9,7 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    public function register(Request $request){
+    public function signup(Request $request){
         $request->validate([
              'name' => 'required|string',
              'email' => 'required|email|unique:users',

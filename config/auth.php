@@ -79,6 +79,24 @@ return [
         // ],
     ],
 
+
+    'defaults' => [
+    'guard' => 'sanctum', // Change this to your preferred guard
+    'passwords' => 'users',
+],
+
+'guards' => [
+    'sanctum' => [
+        'driver' => 'sanctum',
+        'provider' => 'users',
+    ],
+    'api' => [
+        'driver' => 'token',
+        'provider' => 'users',
+    ],
+],
+
+
     /*
     |--------------------------------------------------------------------------
     | Resetting Passwords
